@@ -1,0 +1,24 @@
+{
+    "name": "eypsilon/curler",
+    "type": "library",
+    "license": "MIT",
+    "description": "Many/Curler | another one curls the dust",
+    "minimum-stability": "dev",
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Many\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=7.4"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.1-dev"
+        }
+    }
+}
