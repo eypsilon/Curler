@@ -25,7 +25,7 @@ $imgList = [
 ];
 
 /** @var string File with json content */
-$jsonFile = 'https://gist.githubusercontent.com/eypsilon/982a18d9317acc46a6fe4ed8b6f290e4/raw/a20de0ce3c98402b61fbd15e2ce23a5b212b5576/example.json';
+$jsonFile = 'https://raw.githubusercontent.com/eypsilon/Curler/master/tests/curler/www.example.json';
 
 /** @var array some URLs to load */
 $loadUrls = [
