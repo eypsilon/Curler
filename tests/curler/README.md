@@ -66,7 +66,7 @@ $token = (new Curler)
     ->exec('/api/oauth/token');
 
 $creds = isset($token['access_token']) ? [
-    'Authentication' => "{$token['token_type']} {$token['access_token']}",
+    'Authentication' => [$token['token_type'], $token['access_token']],
 ] : [];
 
 /**

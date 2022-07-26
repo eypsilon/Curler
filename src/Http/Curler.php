@@ -453,7 +453,7 @@ class Curler
      *
      * @return mixed
      */
-    function delete()
+    final function delete()
     {
         $this->method('delete');
         return $this->exec(...func_get_args());

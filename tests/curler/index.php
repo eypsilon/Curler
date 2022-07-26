@@ -1,7 +1,7 @@
 <?php \error_reporting(E_ALL);
 
 /**
- * $ ~/terminal/in/project/tests
+ * $ ~/terminal/in/project/tests/curler/
  * php -S localhost:8000
  * http://localhost:8000
  */
@@ -9,7 +9,7 @@
 use Many\Http\Curler;
 use Many\Exception\AppCallbackException;
 
-require_once \dirname(__DIR__) . '/vendor/autoload.php';
+require_once \dirname(\dirname(__DIR__)) . '/vendor/autoload.php';
 require_once \dirname(__FILE__) . '/callback.functions.php';
 
 
