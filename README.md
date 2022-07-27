@@ -179,9 +179,9 @@ $curl = (new Curler)
 
     // Pre validated callbacks, set simple validator functions to pre-validate the content.
     // If Exceptions are enabled, throws Exceptions on fail, otherwise function gets ignored
-    ->callbackIf(['\Many\Http\Curler::isJson'], 'json_decode', true));
-    ->callbackIf(['\Many\Http\Curler::isJsonObj'], 'json_encode'));
-    ->callbackIf(['is_string'], 'json_decode'));
+    ->callbackIf(['\Many\Http\Curler::isJson'], 'json_decode', true)
+    ->callbackIf(['\Many\Http\Curler::isJsonObj'], 'json_encode')
+    ->callbackIf(['is_string'], 'json_decode')
 
     // Shorthands
     ->jsonDecode(true)                          // Shorty for json_decode()
