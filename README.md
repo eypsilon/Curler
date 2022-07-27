@@ -1,12 +1,14 @@
-# MANY/CURLER | Yet another CURL class
+# MANY/CURLER | Another one CURLs the dust
 
 This class is written to simplify the use of CURL in PHP using chained methods and more rememberable names.
 
-I needed a simple way to explore the Shopware API (v6.*) via http and the Bearer token authentication scheme, but haven't found, what i was looking for to do it, so i ended up with this. It does nothing new at all, nothing exciting, just simple Requests to URLs and Endpoints like you would expect, but a bit prettier than CURL itself.
+I needed a simple way to explore the Shopware API (v6.*) via http and the Bearer token authentication scheme, but haven't found, what i was looking for to do it, so i ended up with this one. It does nothing new at all, nothing exciting, just simple Requests to URLs and Endpoints like you would expect, but a bit prettier than CURL itself.
 
-See [./tests/](./tests/) directory for Examples.
+See [./tests/curler](./tests/curler/) directory for Examples.
 
-`composer require eypsilon/curler`
+```php
+composer require eypsilon/curler
+```
 
 ```php
 use Many\Http\Curler;
@@ -18,7 +20,7 @@ $c = (new Curler)->get('https://example.com/');
 print $c['response'];
 
 /**
- * @var string With Auth creds
+ * @var string with Auth creds
  */
 $xc = (new Curler)
     ->authBasic('user', 'pass')
@@ -27,7 +29,7 @@ $xc = (new Curler)
             'lorem_ipsum' => 'Dolor Sit Amet',
         ])
     )
-    ->responseOnly() // return $c['response']
+    ->responseOnly() // returns $c['response']
     ->exec('/api/usr');
 print $xc;
 ```
@@ -44,7 +46,7 @@ Curler::setConfig([
     'curl_trace'    => false, // track requests, (GET) Curl::getCurlTrace()
     'exceptions'    => false, // enable Exceptions
     'meta'          => false, // enable meta data
-    'request_info'  => false, // getallheaders(), $_SERVER in 'meta'
+    'request_info'  => false, // [getallheaders(), $_SERVER] in 'meta'
     'curl_info'     => false, // CURL generated infos about the request in 'meta'
 
     // Default URL, will be prefixed to each request URL, disable with: ->disableDefaultUrl()
@@ -80,7 +82,7 @@ Curler::setConfig([
         CURLOPT_USERAGENT => 'Many/Curler',
     ],
 
-    // Set a callback function, that gets fired after every curl_exec(), eg. for logging
+    // Set a callback function, that gets fired after first curl_exec(), eg. for logging
     'default_callback' => [], // => ['print_r', true],
 ]);
 
@@ -123,25 +125,25 @@ $curl = (new Curler)
 
 
     /**
-     * HTTP Auth [CURLAUTH_ANY, CURLAUTH_BASIC, CURLAUTH_DIGEST, CURLAUTH_BEARER] */
-    ->httpAuth(CURLAUTH_BASIC) // .htaccess protected
-    ->userPwd('user', 'pass')  // ('user:pass')
+     * HTTP Auth */
+    ->httpAuth(CURLAUTH_BASIC) // protection type
+    ->userPwd('user', 'pass')  // or ('user:pass')
 
-    // Auth any (uses 'basic' or 'digest' auto)
+    // CURLAUTH_ANY | httpAuth() gets auto setted
     ->authAny('user', 'pass')
 
-    // basic
+    // CURLAUTH_BASIC
     ->authBasic('user', 'pass')
 
-    // digest
+    // CURLAUTH_DIGEST
     ->authDigest('user', 'pass')
 
-    // Bearer auth (user optional, not .htaccess)
+    // CURLAUTH_BEARER | auth (?user optional, not .htaccess)
     ->authBearer('token.lr.72.m', '?user')
 
 
     /**
-     * Sets CURLOPT_CUSTOMREQUEST=POST and CURLOPT_POST=true internally
+     * Sets CURLOPT_CUSTOMREQUEST=POST and CURLOPT_POST=true internally.
      * Arrays will be converted to strings using http_build_query() */
     ->post([
         'lorem_ipsum' => 'dolor sit amet',
@@ -150,7 +152,7 @@ $curl = (new Curler)
     /**
      * Set postfields avoiding internally setted stuff to send data as body
      * content, eg PUT. This class uses http_build_query(), if an array is
-     * given. Convert to any string format that fit your needs */
+     * given. Convert to any string format that fits your needs */
     ->postFields(
         json_encode([
             'lorem_ipsum' => 'dolor sit amet',
@@ -175,10 +177,16 @@ $curl = (new Curler)
         return $response;
     })
 
+    // Pre validated callbacks, set simple validator functions to pre-validate the content.
+    // If Exceptions are enabled, throws Exceptions on fail, otherwise function gets ignored
+    ->callbackIf(['\Many\Http\Curler::isJson'], 'json_decode', true));
+    ->callbackIf(['\Many\Http\Curler::isJsonObj'], 'json_encode'));
+    ->callbackIf(['is_string'], 'json_decode'));
+
     // Shorthands
-    ->jsonDecode(true)                          // Shorty for json_decode
-    ->jsonEncode(JSON_PRETTY_PRINT)             // Shorty for json_encode
-    ->htmlChars()                               // Shorty for htmlspecialchars
+    ->jsonDecode(true)                          // Shorty for json_decode()
+    ->jsonEncode(JSON_PRETTY_PRINT)             // Shorty for json_encode()
+    ->htmlChars()                               // Shorty for htmlspecialchars()
     ->htmlSpecialChars()                        // Shorty for ->htmlChars()
 
 
@@ -192,7 +200,7 @@ $curl = (new Curler)
     /**
      * Alternate exec aliases. They all sets their name as REQUEST_METHOD
      * internally. You can use ->postFields(json_encode([])) to send content
-     * additionally in the body. post is not available as alias */
+     * additionally in the body. */
     ->delete() // OR
     ->delete('/api/endpoint', [/* ... */]);
 
@@ -254,7 +262,7 @@ try {
 
 #### Track requested URLs
 
-To track CURL requests, `curl_trace` to true, before doing any request.
+To track CURL requests, set `curl_trace` to true, before doing any request.
 
 ```php
 Curler::setConfig([
@@ -284,6 +292,9 @@ $curlGetBodyContent = Curler::getBodyContent(true);
 /** @var bool Check if val is JSON format */
 $isJson = Curler::isJson('{}', true); // (true) strict mode
 
+/** @var bool Check if val is valid JSON Object (is_array or is_object) */
+$isJson = Curler::isJsonObj([]);
+
 /** @var string Readable Bytes */
 $memUsage = Curler::readableBytes(memory_get_usage());
 
@@ -292,8 +303,8 @@ $microDate = Curler::dateMicroSeconds(null, 'Y-m-d H:i:s.u');
 
 /** @var string Get difference between two Dates with microseconds */
 $microDate = Curler::dateMicroDiff(
-    Curler::dateMicroSeconds($_SERVER['REQUEST_TIME_FLOAT']),
-    Curler::dateMicroSeconds(),
+    Curler::dateMicroSeconds($_SERVER['REQUEST_TIME_FLOAT']), // script started (microtime(true))
+    Curler::dateMicroSeconds(),                               // current microtime(true)
     '%s.%f'
 );
 ```

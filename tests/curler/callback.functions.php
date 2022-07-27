@@ -14,9 +14,9 @@ use Many\Http\Curler;
 
 // Standard output format
 function curlConv($r, $t) {
-    if ($r AND Curler::isJson($r)) {
+    if (Curler::isJson($r)) {
         $j = \json_decode($r);
-        $j->{$t}[] = sprintf('%s done, %s', $t, Curler::dateMicroSeconds(null, 'H:i:s.u'));
+        $j->{$t}[] = \sprintf('%s done, %s', $t, Curler::dateMicroSeconds(null, 'H:i:s.u'));
         $j = \json_encode($j, JSON_PRETTY_PRINT);
     }
     return $j ?? $r;
@@ -35,7 +35,7 @@ function curlCallbackThree($r) {
 }
 
 function appendString($r, $s) {
-    return \is_string($r) ? "{$r}{$s}" : $r;
+    return \is_string($r) ? $r . $s : $r;
 }
 
 /**

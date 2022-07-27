@@ -1,6 +1,6 @@
 # Apache2 HTTP Auth
 
-HTTP Auth setup examples for responding Server.
+HTTP Auth setup examples for responding Server. See [Example Page](./app.responder.receiver.php) how to use.
 
 
 ## AuthType Basic
@@ -14,7 +14,11 @@ AuthUserFile /var/www/curler/basic/.htpasswd
 Require valid-user
 ```
 
-`.htpasswd` (Using Terminal, requires apache2-utils)
+`.htpasswd` (username:123456)
+
+`username:$apr1$OV8TAH3c$MUFUg/h4.Sib1YgvtzwVB/`
+
+Create from Terminal, requires apache2-utils
 
 ```console
 ~$ htpasswd -c /var/www/curler/basic/.htpasswd "username"
@@ -22,7 +26,14 @@ Require valid-user
 ~$ Re-type new password
 ```
 
+Open SSL alternate
+
+```console
+printf "username:$(openssl passwd -crypt PASSWORD)\n" >> .htpasswd
+```
+
 ---
+
 
 ## AuthType Digest
 
@@ -38,7 +49,11 @@ AuthUserFile /var/www/curler/digest/.htpasswd
 Require user "username"
 ```
 
-`.htpasswd` (Using Terminal, requires apache2-utils)
+`.htpasswd` (username:123456)
+
+`username:App Auth Digest:bf24c8c2400fc1118862379312380f17`
+
+Create from Terminal, requires apache2-utils
 
 ```console
 ~$ htdigest -c /var/www/curler/digest/.htpasswd "App Auth Digest" username
@@ -47,6 +62,7 @@ Require user "username"
 ```
 
 ---
+
 
 ## AuthType Bearer
 
@@ -63,6 +79,7 @@ $token = (new Curler)
         'client_secret' => '',
     ])
     ->jsonDecode(true)
+    ->responseOnly()
     ->exec('/api/oauth/token');
 
 $creds = isset($token['access_token']) ? [

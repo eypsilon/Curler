@@ -384,7 +384,7 @@ class Curler
      */
     function jsonDecode(): self
     {
-        $this->callback('json_decode', ...func_get_args());
+        $this->callbackIf(['\\' . __CLASS__ . '::isJson'], 'json_decode', ...func_get_args());
         return $this;
     }
 
@@ -395,7 +395,7 @@ class Curler
      */
     function jsonEncode(): self
     {
-        $this->callback('json_encode', ...func_get_args());
+        $this->callbackIf(['\\' . __CLASS__ . '::isJsonObj'], 'json_encode', ...func_get_args());
         return $this;
     }
 
@@ -406,7 +406,7 @@ class Curler
      */
     function htmlChars(): self
     {
-        $this->callback('htmlspecialchars', ...func_get_args());
+        $this->callbackIf(['is_string'], 'htmlspecialchars', ...func_get_args());
         return $this;
     }
 
@@ -608,7 +608,7 @@ class Curler
     }
 
     /**
-     * Check if a value is a valid JSON string. If strict, the checked value has to be an valid object.
+     * Check if value is a valid JSON string. If strict, the checked value has to be an valid object.
      *
      * @param any $v value to check
      * @param bool $s strict mode, value must be convertible to object, default true
@@ -616,9 +616,22 @@ class Curler
      */
     static function isJson($v, bool $s=true): bool
     {
-        $o = json_decode((string) $v);
-        $i = json_last_error() === JSON_ERROR_NONE;
+        if (is_string($v)) {
+            $o = json_decode($v);
+            $i = json_last_error() === JSON_ERROR_NONE;
+        } else $o = $i = false;
         return $s ? ($i AND is_object($o)) : $i;
+    }
+
+    /**
+     * Check if value is a valid JSON Object (array or object).
+     *
+     * @param any $v value to check
+     * @return bool
+     */
+    static function isJsonObj($v, bool $s=true): bool
+    {
+        return (is_array($v) OR is_object($v));
     }
 
     /**

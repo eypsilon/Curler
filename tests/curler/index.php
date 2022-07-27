@@ -1,7 +1,12 @@
 <?php \error_reporting(E_ALL);
 
 /**
- * $ ~/terminal/in/project/tests/curler/
+ * To use this example, copy the './tests/curler'
+ * directory to where composers  './vendor' directory is
+ *
+ * For demo purposes only
+ *
+ * $ ~/terminal/in/./tests/curler
  * php -S localhost:8000
  * http://localhost:8000
  */
@@ -39,8 +44,8 @@ $loadUrls = [
  */
 Curler::setConfig([
     'response_only'  => false,
-    'curl_trace'     => true,
-    'exceptions'     => true,
+    'curl_trace'     => true, // (default) false
+    'exceptions'     => false, // (default) false
     'meta'           => false,
     'request_info'   => false,
     'curl_info'      => false,
@@ -85,6 +90,12 @@ try {
             return curlConv($response, 'closure_callback');
         })
 
+        // pre validate content
+        // ->callback('appendString', ' ...')
+        ->jsonDecode()
+        ->jsonEncode()
+        ->callbackIf(['is_string'], 'curlConv', 'done_too')
+
         // callback shorties
         ->jsonDecode()                             // ->callback('json_decode')
         ->jsonEncode(JSON_PRETTY_PRINT)            // ->callback('json_encode', JSON_PRETTY_PRINT)
@@ -92,7 +103,7 @@ try {
 
         ->exec($jsonFile);
 } catch(AppCallbackException $e) {
-    $curled['curler']['exception']['curler'] = $e->getMessage();
+    $curled['exception']['curler'] = $e->getMessage();
 }
 
 
@@ -109,7 +120,7 @@ foreach($loadUrls as $url) {
             ->callback('appendString', '… ' . Curler::dateMicroSeconds())
             ->get($url);
     } catch(AppCallbackException $e) {
-        $curled['curler']['exception']['multi_url'][] = $e->getMessage();
+        $curled['exception']['load_urls'][$host] = $e->getMessage();
     }
 }
 
@@ -134,13 +145,13 @@ foreach($imgList as $img) {
             $printImages[] = \sprintf('<img src="%s" alt="" style="height:125px" />', $src['response']);
         }
     } catch(AppCallbackException $e) {
-        $curled['curler']['exception']['multi_img'][] = $e->getMessage();
+        $curled['exception']['imgs'][$img] = $e->getMessage();
     }
 }
 
 
 /**
- * Template Engin © 1997 eypsilon
+ * Template Engin © 1994 eypsilon
  */
 ?><!DOCTYPE html>
 <html><head><meta charset="utf-8" />
@@ -148,6 +159,7 @@ foreach($imgList as $img) {
 <meta name="description" content="Many/Curler Example Page" />
 </head><body>
 <?php
+// out
 \printf('%s<pre>%s</pre>'
     , \implode(PHP_EOL, $printImages) // print images
     , \print_r(\array_merge($curled, [
@@ -160,7 +172,7 @@ foreach($imgList as $img) {
 // advanced benchmarks
 \printf("<pre>start: %s\nend:   %s\ndiff:  %s\nmem:   %s\npeak:  %s</pre>"
     , $started = Curler::dateMicroSeconds($_SERVER['REQUEST_TIME_FLOAT'], 'H:i:s.u')
-    , $current = Curler::dateMicroSeconds(\microtime(true), 'H:i:s.u')
+    , $current = Curler::dateMicroSeconds(null, 'H:i:s.u') // current microtime(true)
     , Curler::dateMicroDiff($started, $current, '%s.%f')
     , Curler::readableBytes(\memory_get_usage())
     , Curler::readableBytes(\memory_get_peak_usage())

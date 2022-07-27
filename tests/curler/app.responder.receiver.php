@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Curler Responder, let's say 'https://example.com/restricted/' is .htaccess protected
+ * Curler Responder, let's say 'https://example.com/restricted/' is .htaccess protected and returns
  */
 
 $rspns = [
@@ -16,7 +16,7 @@ $rspns = [
 $setType = $rspns['c_types'][$_GET['c_type'] ?? null] ?? null;
 $cType = $setType ?? $_SERVER['CONTENT_TYPE'] ?? 'text/html';
 
-/** Set Content-Type header auto, if requested is listed in 'c_types' */
+/** Set Content-Type header auto, if requested one is listed in 'c_types' */
 if ($setType)
     header(sprintf('Content-Type: %s; charset: %s', $cType, $_GET['charset'] ?? 'UTF-8'));
 
@@ -32,11 +32,11 @@ exit('application/json' == $cType
 
 
 /**
- * Curler Receiver, access .htaccess protected ressources
+ * Curler Receiver, access the .htaccess protected ressources
  */
 
 $curler = (new Curler)
-    ->authAny('many', '123456') // auto ->authBasic() or Digest()
+    ->authAny('many', '123456') // auto ->authBasic() or ->authDigest()
     ->postFields([
         'lorem_ipsum' => 'Dolor Sit Amet',
     ])

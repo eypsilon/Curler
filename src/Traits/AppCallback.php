@@ -10,6 +10,7 @@ use function crc32;
 use function explode;
 use function func_get_args;
 use function function_exists;
+use function gettype;
 use function header;
 use function is_callable;
 use function is_string;
@@ -37,6 +38,11 @@ trait AppCallback
     private $enableExceptions = false;
 
     /**
+     * @var array Validation rules to pre-validate the Content. If exceptions are disabled, the Callback will be ignored
+     */
+    private $validateCallback = [];
+
+    /**
      * Enables chained callbacks for the using Class
      *
      * @param string function name
@@ -49,11 +55,34 @@ trait AppCallback
         $args = func_get_args();
         $fn = $args[0] ?? [];
         unset($args[0]);
+        $validate = $this->validateCallback;
+        $this->validateCallback = [];
         if ($fn)
-            $this->callback[] = ['function' => $fn, 'params' => $args];
+            $this->callback[] = [
+                'function' => $fn,
+                'params' => $args,
+                'validate' => $validate,
+            ];
         elseif (empty($fn))
             $this->callbackError('Function is empty', __FUNCTION__);
         return $this;
+    }
+
+    /**
+     * Enables chained callbacks with pre-validator for the Content
+     *
+     * @param array primitive Validators, eg. ['is_string', 'c_type_print']
+     * @param string function name
+     * @param array parameters
+     * @return self
+     * @throws AppCallbackException
+     */
+    function callbackIf(): self
+    {
+        $args = func_get_args();
+        $this->validateCallback = $args[0];
+        unset($args[0]);
+        return $this->callback(...$args);
     }
 
     /**
@@ -73,7 +102,12 @@ trait AppCallback
         if ($this->callback)
             foreach($this->callback as $cb)
                 if ($cb['function'] ?? null)
-                    $content = $this->execIfCallable($cb['function'], array_values($cb['params'] ?? []), $content);
+                    $content = $this->execIfCallable(
+                        $cb['function'],
+                        array_values($cb['params'] ?? []),
+                        $content,
+                        $cb['validate']
+                    );
         return $content;
     }
 
@@ -86,9 +120,15 @@ trait AppCallback
      * @return mixed|null
      * @throws AppCallbackException
      */
-    protected function execIfCallable($fn, array $params, $content)
+    protected function execIfCallable($fn, array $params, $content, array $validate)
     {
-        $exec = function($cls=null, $mtd=null) use($fn, $params, $content) {
+        $exec = function($cls=null, $mtd=null) use($fn, $params, $content, $validate) {
+            if ($validate)
+                foreach($validate as $valid)
+                    if (is_callable($valid) AND !$valid($content)) {
+                        $this->callbackError(sprintf('Content is not valid %s, type is %s', $valid, gettype($content)), __FUNCTION__);
+                        return $content;
+                    }
             if ($cls AND $mtd)
                 return call_user_func([new $cls, $mtd], $content, ...$params);
             return call_user_func($fn, $content, ...$params);
