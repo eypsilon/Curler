@@ -6,7 +6,7 @@ I needed a simple way to explore the Shopware API (v6.*) via http and the Bearer
 
 See [./tests/curler](./tests/curler/) directory for Examples.
 
-```php
+```terminal
 composer require eypsilon/curler
 ```
 
@@ -23,7 +23,7 @@ print $c['response'];
  * @var string with Auth creds
  */
 $xc = (new Curler)
-    ->authBasic('user', 'pass')
+    ->authAny('user', 'pass')
     ->post(
         json_encode([
             'lorem_ipsum' => 'Dolor Sit Amet',
@@ -192,26 +192,26 @@ $curl = (new Curler)
 
     /**
      * Final execs, getter */
-    ->exec(); // OR
+    ->exec() // OR
     ->exec('/api/endpoint', [
         CURLOPT_USERAGENT => 'AwesomeCurler', // set any CURL option here
-    ]);
+    ])
 
     /**
      * Alternate exec aliases. They all sets their name as REQUEST_METHOD
      * internally. You can use ->postFields(json_encode([])) to send content
      * additionally in the body. */
     ->delete() // OR
-    ->delete('/api/endpoint', [/* ... */]);
+    ->delete('/api/endpoint', [/* ... */])
 
     ->get()
-    ->get('/api/endpoint', [/* ... */]);
+    ->get('/api/endpoint', [/* ... */])
 
     ->patch()
-    ->patch('/api/endpoint', [/* ... */]);
+    ->patch('/api/endpoint', [/* ... */])
 
     ->put()
-    ->put('/api/endpoint', [/* ... */]);
+    ->put('/api/endpoint', [/* ... */])
 ```
 
 

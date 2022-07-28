@@ -2,7 +2,7 @@
     "name": "eypsilon/curler",
     "type": "library",
     "license": "MIT",
-    "description": "Many/Curler | Another one CURLs the dust ",
+    "description": "Many/Curler | Another one CURLs the dust",
     "minimum-stability": "dev",
     "config": {
         "optimize-autoloader": true,

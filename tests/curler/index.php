@@ -45,7 +45,7 @@ $loadUrls = [
 Curler::setConfig([
     'response_only'  => false,
     'curl_trace'     => true, // (default) false
-    'exceptions'     => false, // (default) false
+    'exceptions'     => true, // (default) false
     'meta'           => false,
     'request_info'   => false,
     'curl_info'      => false,
@@ -113,7 +113,7 @@ try {
 foreach($loadUrls as $url) {
     try {
         $host = \parse_url($url, PHP_URL_HOST);
-        $curled[$host] = (new Curler)
+        $curled['load_urls'][] = (new Curler)
             ->htmlChars()
             ->callback('trim')
             ->callback('substr', 0, 17)
@@ -145,7 +145,7 @@ foreach($imgList as $img) {
             $printImages[] = \sprintf('<img src="%s" alt="" style="height:125px" />', $src['response']);
         }
     } catch(AppCallbackException $e) {
-        $curled['exception']['imgs'][$img] = $e->getMessage();
+        $curled['exception']['images'][$img] = $e->getMessage();
     }
 }
 

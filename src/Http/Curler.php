@@ -41,6 +41,7 @@ use function sprintf;
 use function strtoupper;
 use function substr;
 use function trim;
+use const CURLAUTH_ANY;
 use const CURLAUTH_BASIC;
 use const CURLAUTH_BEARER;
 use const CURLAUTH_DIGEST;
@@ -629,7 +630,7 @@ class Curler
      * @param any $v value to check
      * @return bool
      */
-    static function isJsonObj($v, bool $s=true): bool
+    static function isJsonObj($v): bool
     {
         return (is_array($v) OR is_object($v));
     }
@@ -637,18 +638,18 @@ class Curler
     /**
      * Get datetime with microseconds
      *
-     * @param string|null $datetime if null, returns current date()
-     * @param string $format
-     * @param int $substr
+     * @param string|null $d datetime if null, returns current date()
+     * @param string $f format
+     * @param int $s substr
      * @return string
      */
-    static function dateMicroSeconds(string $datetime=null, string $format=null, int $substr=-2): string
+    static function dateMicroSeconds(string $d=null, string $f=null, int $s=-2): string
     {
-        $datetime = $datetime ?? microtime(true);
-        $format = is_string($format) ? $format : self::$curlConfig['date_format'];
-        return substr(DateTime::createFromFormat('U.u', (string) $datetime)
+        $d = $d ?? microtime(true);
+        $f = is_string($f) ? $f : self::$curlConfig['date_format'];
+        return substr(DateTime::createFromFormat('U.u', (string) $d)
             ->setTimezone(new DateTimeZone(date_default_timezone_get()))
-            ->format($format), 0, $substr);
+            ->format($f), 0, $s);
     }
 
     /**
