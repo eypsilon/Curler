@@ -293,7 +293,7 @@ $curlGetBodyContent = Curler::getBodyContent(true);
 $isJson = Curler::isJson('{}', true); // (true) strict mode
 
 /** @var bool Check if val is valid JSON Object (is_array or is_object) */
-$isJson = Curler::isJsonObj([]);
+$isJsonObj = Curler::isJsonObj([]);
 
 /** @var string Readable Bytes */
 $memUsage = Curler::readableBytes(memory_get_usage());
@@ -302,7 +302,7 @@ $memUsage = Curler::readableBytes(memory_get_usage());
 $microDate = Curler::dateMicroSeconds(null, 'Y-m-d H:i:s.u');
 
 /** @var string Get difference between two Dates with microseconds */
-$microDate = Curler::dateMicroDiff(
+$microDateDiff = Curler::dateMicroDiff(
     Curler::dateMicroSeconds($_SERVER['REQUEST_TIME_FLOAT']), // script started (microtime(true))
     Curler::dateMicroSeconds(),                               // current microtime(true)
     '%s.%f'
