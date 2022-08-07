@@ -63,7 +63,6 @@ Curler::setConfig([
 ]);
 
 
-
 /**
  * @var Curler extended example with multiple callbacks (order matters)
  */
@@ -131,9 +130,7 @@ foreach($loadUrls as $url) {
 Curler::setConfig([
     'meta' => true,
     'default_url' => $defaultUrl,
-    'image_to_data' => [
-        'image/jpeg', // 'image/png', 'image/gif',
-    ],
+    'image_to_data' => ['image/jpeg', /* 'image/png', */],
 ]);
 
 $c = new Curler;

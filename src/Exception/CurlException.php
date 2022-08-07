@@ -2,7 +2,7 @@
 
 namespace Many\Exception;
 
-use Many\Exception\Exceptions;
+use Exception;
 
 /**
  * Curl Exception
@@ -10,8 +10,11 @@ use Many\Exception\Exceptions;
  * @author Engin Ypsilon <engin.ypsilon@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  */
-final class CurlException extends Exceptions
+final class CurlException extends Exception
 {
-    /** @var Int Default http_response_code */
-    protected $errorCode = 406;
+    /** @return Exception */
+    function __construct(string $message=null, Int $code=406)
+    {
+        return parent::__construct($message, $code);
+    }
 }

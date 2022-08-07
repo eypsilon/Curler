@@ -29,7 +29,7 @@ $xc = (new Curler)
             'lorem_ipsum' => 'Dolor Sit Amet',
         ])
     )
-    ->responseOnly() // returns $c['response']
+    ->responseOnly() // returns $xc['response']
     ->exec('/api/usr');
 print $xc;
 ```
@@ -129,7 +129,7 @@ $curl = (new Curler)
     ->httpAuth(CURLAUTH_BASIC) // protection type
     ->userPwd('user', 'pass')  // or ('user:pass')
 
-    // CURLAUTH_ANY | httpAuth() gets auto setted
+    // CURLAUTH_ANY (.htaccess, uses basic or digest)
     ->authAny('user', 'pass')
 
     // CURLAUTH_BASIC
@@ -138,7 +138,7 @@ $curl = (new Curler)
     // CURLAUTH_DIGEST
     ->authDigest('user', 'pass')
 
-    // CURLAUTH_BEARER | auth (?user optional, not .htaccess)
+    // CURLAUTH_BEARER (?user optional, not .htaccess)
     ->authBearer('token.lr.72.m', '?user')
 
 
