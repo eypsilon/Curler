@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/*.php": {
+    "tests/curler/*.php": {
       "runtime": "vercel-php@0.5.2"
     }
   },
