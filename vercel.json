@@ -1,10 +1,7 @@
 {
   "functions": {
-    "tests/curler/*.php": {
+    "tests/curler/index.php": {
       "runtime": "vercel-php@0.4.0"
     }
-  },
-  "routes": [
-    { "src": "/(.*)",  "dest": "/tests/curler/index.php" }
-  ]
+  }
 }
