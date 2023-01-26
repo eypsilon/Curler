@@ -14,7 +14,7 @@
 use Many\Http\Curler;
 use Many\Exception\AppCallbackException;
 
-require_once \dirname(\dirname(__DIR__)) . '/vendor/autoload.php';
+require_once \dirname(__DIR__) . '/vendor/autoload.php';
 require_once \dirname(__FILE__) . '/callback.functions.php';
 
 
@@ -109,9 +109,9 @@ try {
 /**
  * @var array Load multiple URLs
  */
-foreach($loadUrls as $url) {
+foreach($loadUrls as $i => $url) {
     try {
-        $host = \parse_url($url, PHP_URL_HOST);
+        $host = \parse_url((string) $url, PHP_URL_HOST);
         $curled['load_urls'][] = (new Curler)
             ->htmlChars()
             ->callback('trim')
