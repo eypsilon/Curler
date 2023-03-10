@@ -4,9 +4,9 @@ This class is written to simplify the use of CURL in PHP using chained methods a
 
 I needed a simple way to explore the Shopware API (v6.*) via http and the Bearer token authentication scheme, but haven't found, what i was looking for to do it, so i ended up with this one. It does nothing new at all, nothing exciting, just simple Requests to URLs and Endpoints like you would expect, but a bit prettier than CURL itself.
 
-See [./tests/curler](./tests/curler/) directory for Examples.
+See [./public/index.php](./public/index.php) for examples or check the livedemo on [Vercel](https://curler-eypsilon.vercel.app/).
 
-```terminal
+```bash
 composer require eypsilon/curler
 ```
 

@@ -1,10 +1,10 @@
 {
-    "functions": {
-      "public/index.php": {
-        "runtime": "vercel-php@0.4.0"
-      }
-    },
-    "rewrites": [
-        { "source": "/(.*)", "destination": "/public/index.php" }
-    ]
-  }
+  "functions": {
+    "api/index.php": {
+      "runtime": "vercel-php@0.5.2"
+    }
+  },
+  "routes": [
+    { "src": "/(.*)",  "dest": "/api/index.php" }
+  ]
+}

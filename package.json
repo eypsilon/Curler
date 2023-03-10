@@ -1,5 +1,0 @@
-{
-  "scripts": {
-    "build": "eypsilon/curler build --output public"
-  }
-}

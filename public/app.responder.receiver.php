@@ -4,6 +4,8 @@
  * Curler Responder, let's say 'https://example.com/restricted/' is .htaccess protected and returns
  */
 
+use Many\Http\Curler;
+
 $rspns = [
     'auth_type' => $_SERVER['AUTH_TYPE'] ?? 'error',
     'header' => getallheaders(),

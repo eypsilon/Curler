@@ -1,4 +1,6 @@
 vendor/
+.git/
 .github/
 .notes
 composer.lock
+.vercel
