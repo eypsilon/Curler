@@ -31,7 +31,7 @@ $imgList = [
 ];
 
 /** @var string File with json content */
-$jsonFile = 'https://raw.githubusercontent.com/eypsilon/MycroBench/master/composer.json';
+$jsonFile = 'https://raw.githubusercontent.com/eypsilon/Curler/master/public/www.example.json';
 
 /** @var array some URLs to load */
 $loadUrls = [
