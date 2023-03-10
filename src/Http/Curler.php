@@ -727,9 +727,11 @@ class Curler
             'http_code' => curl_getinfo($c, CURLINFO_RESPONSE_CODE),
         ];
 
+        $infoScheme = defined('CURLINFO_SCHEME') ? CURLINFO_SCHEME : 1048625;
+
         if (self::$curlConfig['meta'])
             $r['meta'] = [
-                'scheme' => curl_getinfo($c, CURLINFO_SCHEME),
+                'scheme' => curl_getinfo($c, $infoScheme),
                 'size' => static::readableBytes(curl_getinfo($c, CURLINFO_SIZE_DOWNLOAD)),
                 'datetime' => static::dateMicroSeconds(),
             ];
