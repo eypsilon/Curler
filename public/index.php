@@ -31,7 +31,7 @@ $imgList = [
 ];
 
 /** @var string File with json content */
-$jsonFile = 'https://raw.githubusercontent.com/eypsilon/Curler/master/public/www.example.json';
+$jsonFile = 'https://raw.githubusercontent.com/eypsilon/Curler/master/www.example.json';
 
 /** @var array some URLs to load */
 $loadUrls = [
@@ -40,6 +40,8 @@ $loadUrls = [
     'https://github.com/eypsilon/MycroBench',
 ];
 
+/** @var string default Url for Live tester */
+$defaultLiveUrl = 'https://mycro-bench.vercel.app/?x-times=10';
 
 /**
  * @var array Set Config
@@ -155,7 +157,7 @@ foreach($imgList as $img)
 }
 
 $url = $_GET['url'] ?? null;
-$setUrl = is_string($url) ? $url : 'https://mycro-bench.vercel.app/';
+$setUrl = is_string($url) ? $url : $defaultLiveUrl;
 
 /**
  * @Template\Engin © 1994 eypsilon
@@ -237,7 +239,6 @@ printf("<hr /><pre>start: %s\nend:   %s\ndiff:  %s\nmem:   %s\npeak:  %s</pre>"
     , Curler::readableBytes(memory_get_usage())
     , Curler::readableBytes(memory_get_peak_usage())
 );
-
 ?>
 </body>
 </html>
